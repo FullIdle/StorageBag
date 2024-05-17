@@ -1,0 +1,9 @@
+type: 'PAPER'
+
+msg:
+  help:
+    - 'HELP'
+    - '/storagebag give [player] [gui_slot[1-6]] 给指定玩家一个指定行数的背包'
+    - '/storagebag help 你猜'
+    - '/storagebag settype [gui_slot[1-6]] 设置手上背包的行数(少用)'
+    - '/storagebag settitle [gui_title] 设置手上背包的标题'

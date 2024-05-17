@@ -1,0 +1,6 @@
+name: ${rootProject.name}
+main: ${group}
+version: ${version}
+commands:
+  storagebag:
+    description: main cmd
