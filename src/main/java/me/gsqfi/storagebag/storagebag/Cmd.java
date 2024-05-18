@@ -1,6 +1,8 @@
 package me.gsqfi.storagebag.storagebag;
 
 import com.google.common.collect.Lists;
+import me.fullidle.ficore.ficore.common.bukkit.inventory.CraftItemStack;
+import me.fullidle.ficore.ficore.common.bukkit.nbt.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,11 +17,11 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Cmd implements TabExecutor {
     List<String> sub = Lists.newArrayList(
@@ -84,13 +86,13 @@ public class Cmd implements TabExecutor {
                             String title = args[1].replace('&','§');
                             bag.set("gui_title",title);
                             itemMeta.setDisplayName(title);
+                            itemStack.setItemMeta(itemMeta);
                         }
-                        List<String> lore = itemMeta.getLore();
-                        lore.remove(lore.size()-1);
-                        lore.add(bag.saveToString());
-                        itemMeta.setLore(lore);
-                        itemStack.setItemMeta(itemMeta);
-                        playerInventory.setItemInMainHand(itemStack);
+                        me.fullidle.ficore.ficore.common.bukkit.inventory.ItemStack stack = new me.fullidle.ficore.ficore.common.bukkit.inventory.ItemStack(CraftItemStack.asNMSCopy(itemStack));
+                        NBTTagCompound compound = new NBTTagCompound(stack.getNBTTag());
+                        compound.setString("StorageBag_Data",bag.saveToString());
+                        stack.setNBTTag(compound.getNbtTagCompound());
+                        playerInventory.setItemInMainHand(CraftItemStack.asBukkitCopy(stack.getV1_itemStack()));
                         commandSender.sendMessage("§a已经修改手上背包");
                         break;
                     }
@@ -118,15 +120,18 @@ public class Cmd implements TabExecutor {
                         ItemStack itemStack = new ItemStack(Material.getMaterial(Main.plugin.getConfig().getString("type")));
                         ItemMeta itemMeta = itemStack.getItemMeta();
                         itemMeta.setDisplayName("§6A Bag");
-                        ArrayList<String> list = new ArrayList<>();
-                        list.add("yaml");
                         YamlConfiguration yaml = YamlConfiguration.loadConfiguration(new StringReader(""));
                         yaml.set("uuid", UUID.randomUUID().toString());
                         yaml.set("gui_title","§6A Bag");
                         yaml.set("gui_type",type);
-                        list.add(yaml.saveToString());
-                        itemMeta.setLore(list);
                         itemStack.setItemMeta(itemMeta);
+
+                        me.fullidle.ficore.ficore.common.bukkit.inventory.ItemStack nmsCopy = new me.fullidle.ficore.ficore.common.bukkit.inventory.ItemStack(CraftItemStack.asNMSCopy(itemStack));
+                        NBTTagCompound compound = new NBTTagCompound(nmsCopy.getNBTTag());
+                        compound.setString("StorageBag_Data",yaml.saveToString());
+                        nmsCopy.setNBTTag(compound.getNbtTagCompound());
+                        itemStack = CraftItemStack.asBukkitCopy(nmsCopy.getV1_itemStack());
+
                         Location location = player.getLocation();
                         location.setY(location.getY()+0.25);
                         Item item = player.getWorld().dropItem(location, itemStack);
@@ -156,6 +161,11 @@ public class Cmd implements TabExecutor {
         String lowerCase = args[0].toLowerCase();
         if (length == 1) {
             return sub.stream().filter(s-> s.startsWith(lowerCase)).collect(Collectors.toList());
+        }
+        if (args[0].equalsIgnoreCase("give")){
+            if (length == 2) {
+                return null;
+            }
         }
         return Collections.emptyList();
     }

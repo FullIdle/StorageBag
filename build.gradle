@@ -22,7 +22,8 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
 
     compileOnly 'me.clip:placeholderapi:2.11.5'
-    compileOnly 'me.fullidle.ficore:FICore:1.2.2'
+    compileOnly 'me.fullidle.ficore:FICore:1.2.6'
+    compileOnly 'me.forge.forgedev:ForgeDev:1.12.2'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.1'

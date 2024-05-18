@@ -1,6 +1,8 @@
 name: ${rootProject.name}
 main: ${group}
 version: ${version}
+depend:
+  - FICore
 commands:
   storagebag:
     description: main cmd
