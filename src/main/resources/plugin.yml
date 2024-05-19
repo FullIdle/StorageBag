@@ -6,3 +6,12 @@ depend:
 commands:
   storagebag:
     description: main cmd
+permissions:
+  storagebag.cmd.admin:
+    default: op
+  storagebag.cmd.settitle:
+    default: true
+  storagebag.cmd.settype:
+    default: op
+  storagebag.cmd.give:
+    default: op

@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Cmd implements TabExecutor {
     List<String> sub = Lists.newArrayList(
@@ -45,12 +44,21 @@ public class Cmd implements TabExecutor {
                         break;
                     }
                     case "reload":{
+                        if (!commandSender.hasPermission("storagebag.cmd.admin")){
+                            commandSender.sendMessage("§cYou don't have permissions!");
+                            return false;
+                        }
                         Main.plugin.reloadConfig();
                         commandSender.sendMessage("§aReloaded!");
                         break;
                     }
                     case "settype":
                     case "settitle":{
+                        if (!commandSender.hasPermission("storagebag.cmd."+lowerCase)){
+                            commandSender.sendMessage("§cYou don't have permissions!");
+                            return false;
+                        }
+
                         if (player == null) {
                             commandSender.sendMessage("§cYou are not a player");
                             return false;
@@ -97,6 +105,11 @@ public class Cmd implements TabExecutor {
                         break;
                     }
                     case "give":{
+                        if (!commandSender.hasPermission("storagebag.cmd.give")){
+                            commandSender.sendMessage("§cYou don't have permissions!");
+                            return false;
+                        }
+
                         if (args.length < 3) {
                             commandSender.sendMessage(help);
                             return false;
